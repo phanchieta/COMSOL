@@ -8,6 +8,7 @@ package COMSOLmaster;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import static java.lang.Math.abs;
 import static java.lang.System.in;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public OutputReader (String path) throws IOException
       Scanner sc = new Scanner(strLine);
       x_val.add(sc.nextDouble());
       y_val.add(sc.nextDouble());
-      speed.add(sc.nextDouble());
+      speed.add(abs(sc.nextDouble()));
       //pressure.add(sc.nextDouble());
       
       

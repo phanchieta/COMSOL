@@ -40,25 +40,13 @@ public class Optimizer {
         
         private static String classfile;
         private static final double BAFFLE_W_MIN = 0;
-        private static final double BAFFLE_W_MAX = 0.4; /*Old was 0.66*/
+        private static final double BAFFLE_W_MAX = 0.66; 
         private static final double RECT2_Y_MIN = 0;
         private static final double RECT2_Y_MAX = 0.1; /*Limiting inlet to a height 0-10%*/
         private static final double RECT1_SIZE_Y_MIN = 0.5;
         private static final double RECT1_SIZE_Y_MAX = 10;
         private static final double RECT3_Y_MIN = 0.9; /*Limiting outlet to a height of 90-100%*/
         private static final double RECT3_Y_MAX = 1;
-        /*private static final double RECT4_Y_MIN = 0.124;
-        private static final double RECT4_Y_MAX = 0.2;
-        private static final double RECT5_Y_MIN = 0.34;
-        private static final double RECT5_Y_MAX = 0.448;
-        private static final double RECT6_Y_MIN = 0.6;
-        private static final double RECT6_Y_MAX = 0.7;
-        private static final double RECT7_Y_MIN = 0.23;
-        private static final double RECT7_Y_MAX = 0.3;
-        private static final double RECT8_Y_MIN = 0.48;
-        private static final double RECT8_Y_MAX = 0.55;
-        private static final double RECT9_Y_MIN = 0.74;
-        private static final double RECT9_Y_MAX = 0.8;*/
         private static final double BAFFLE_H_MIN = 0.01;
         private static final double BAFFLE_H_MAX = 0.04;
                 
@@ -97,15 +85,7 @@ public class Optimizer {
                 if (line == null) { break; }
                 System.out.println(line);
             }
-            /*double rect2X, rect1Ypos, rect3Ypos;
-            
-            rect1Ypos = rect3Ypos = x[1] - 0.1;
-            rect1Ypos = rect1Ypos * x[0];
-            rect3Ypos = rect3Ypos * x[2];
-            rect2X = 5/x[1];
-            
-            builder.command("cmd.exe", "/c", "comsolbatch -inputfile " + classfile + " \"%cd%\" " + rect1Ypos + " " + rect2X + " " + x[1] + " " + rect3Ypos);*/
-            
+                       
             
             double rect1X, rect2Ypos, rect3Ypos;
             
@@ -114,10 +94,7 @@ public class Optimizer {
             rect3Ypos = rect3Ypos * x[2];
             rect1X = 5/x[0];
                     
-            /*builder.command("cmd.exe", "/c", "comsolbatch -inputfile " + classfile + " \"%cd%\" " + rect1X + " " + x[0] + " " + rect2Ypos + " " + rect3Ypos
-            + " " + x[3]*rect1X+ " " + x[4]*x[0]+ " " + x[5]*rect1X+ " " + x[6]*x[0]+ " " + x[7]*rect1X + " " + x[8]*x[0] + " " + x[9]*rect1X+ " " + x[10]*x[0] + " " + x[11]*rect1X+ " " + x[12]*x[0] + " " + x[13]*rect1X+ " " + x[14]*x[0]);
-               */
-            
+                        
             builder.command("cmd.exe", "/c", "comsolbatch -inputfile " + classfile + " \"%cd%\" " + rect1X + " " + x[0] + " " + rect2Ypos + " " + rect3Ypos
                     + " " + x[3]*rect1X + " " + x[4]*x[0]); 
                     
@@ -157,11 +134,7 @@ public class Optimizer {
                     
             PrintWriter out = new PrintWriter(bw))
             {
-                /*out.println(rect1X + " " + x[0] + " " + rect2Ypos + " " + rect3Ypos
-            + " " + x[3]*rect1X+ " " + x[4]*x[0]+ " " + x[5]*rect1X+ " " + x[6]*x[0]+ " " + x[7]*rect1X + " " + x[8]*x[0] + " " + x[9]*rect1X+ " " + x[10]*x[0] + " " + x[11]*rect1X+ " " + x[12]*x[0] + " " + x[13]*rect1X+ " " + x[14]*x[0] + " ->" + or.avgSpeed()); */
                 /*Printing each fitness function to file conv.txt*/
-                
-          
                     out.println(rect1X + " " + x[0] + " " + rect2Ypos + " " + rect3Ypos
             + " " + x[3]*rect1X+ " " + x[4]*x[0]+ " ->" + or.avgSpeed());
                 
@@ -195,18 +168,7 @@ public class Optimizer {
 				codecs.ofVector(DoubleRange.of(RECT1_SIZE_Y_MIN,RECT1_SIZE_Y_MAX),
                                         DoubleRange.of(RECT2_Y_MIN,RECT2_Y_MAX),
                                         DoubleRange.of(RECT3_Y_MIN,RECT3_Y_MAX),
-                                        DoubleRange.of(BAFFLE_W_MIN,BAFFLE_W_MAX),/*
-                                        DoubleRange.of(RECT4_Y_MIN,RECT4_Y_MAX),
-                                        DoubleRange.of(BAFFLE_MIN,BAFFLE_MAX),
-                                        DoubleRange.of(RECT5_Y_MIN,RECT5_Y_MAX),
-                                        DoubleRange.of(BAFFLE_MIN,BAFFLE_MAX),
-                                        DoubleRange.of(RECT6_Y_MIN,RECT6_Y_MAX),
-                                        DoubleRange.of(BAFFLE_MIN,BAFFLE_MAX),
-                                        DoubleRange.of(RECT7_Y_MIN,RECT7_Y_MAX),
-                                        DoubleRange.of(BAFFLE_MIN,BAFFLE_MAX),
-                                        DoubleRange.of(RECT8_Y_MIN,RECT8_Y_MAX),
-                                        DoubleRange.of(BAFFLE_MIN,BAFFLE_MAX),
-                                        DoubleRange.of(RECT9_Y_MIN,RECT9_Y_MAX))*/
+                                        DoubleRange.of(BAFFLE_W_MIN,BAFFLE_W_MAX),
                                         DoubleRange.of(BAFFLE_H_MIN, BAFFLE_H_MAX)
                                         )
                         )

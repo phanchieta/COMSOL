@@ -5,15 +5,14 @@
 import com.comsol.model.*;
 import com.comsol.model.util.*;
 
-/** Model exported on Oct 25 2016, 10:58 by COMSOL 5.2.1.199. */
+/** Model exported on Nov 1 2016, 14:11 by COMSOL 5.2.1.199. */
 public class baffles_velocity {
 
-  public static Model run(String wdir, String rect1W, String rect1H, String rect2Y, String rect3Y, String rect4W, String rect4Y, String rect5W, String rect5Y, String rect6W, String rect6Y, String rect7W, String rect7Y, String rect8W, String rect8Y, String rect9W, String rect9Y) {
+  public static Model run(String wdir, String rect1W, String rect1H, String rect2Y, String rect3Y, String baffle_W, String baffle_H) {
+    Model model = ModelUtil.create("Model");
 
-	
-	Model model = ModelUtil.create("Model");
-
-    model.modelPath(wdir);
+    model
+         .modelPath(wdir);
 
     model.comments("Untitled\n\n");
 
@@ -43,10 +42,10 @@ public class baffles_velocity {
 
     model.label("pilotreactor_vel_algae_axial flow baffles_2D alt_rerebuild.mph");
 	
-    float f_rect3Xpos = Float.parseFloat(rect1W);
+	float f_rect3Xpos = Float.parseFloat(rect1W);
 	f_rect3Xpos = f_rect3Xpos + 1.5f;
 	String rect3X = Float.toString(f_rect3Xpos);
-	
+
     model.geom("geom1").run("r1");
     model.geom("geom1").run("r1");
     model.geom("geom1").feature().create("r2", "Rectangle");
@@ -63,6 +62,16 @@ public class baffles_velocity {
     model.geom("geom1").feature("r3").set("size", new String[]{"1.5", "0.12"});
     model.geom("geom1").run("r3");
     model.geom("geom1").run("r3");
+	
+	float rect4Y_f = 0.2f * Float.parseFloat(rect1H);
+	float rect5Y_f = 0.448f * Float.parseFloat(rect1H);
+	float rect6Y_f = 0.7f * Float.parseFloat(rect1H);
+	
+	String rect4Y = Float.toString (rect4Y_f);
+	String rect5Y = Float.toString (rect5Y_f);
+	String rect6Y = Float.toString (rect6Y_f);
+	
+		
     model.geom("geom1").feature().create("r4", "Rectangle");
     model.geom("geom1").feature("r4").set("type", "solid");
     model.geom("geom1").feature("r4").set("base", "corner");
@@ -76,53 +85,56 @@ public class baffles_velocity {
     model.geom("geom1").feature("r4").set("type", "solid");
     model.geom("geom1").feature("r4").set("base", "corner");
     model.geom("geom1").feature("r4").set("pos", new String[]{"1.5", rect4Y});
-    model.geom("geom1").feature("r4").set("size", new String[]{rect4W, "0.12"});
+    model.geom("geom1").feature("r4").set("size", new String[]{baffle_W, baffle_H});
     model.geom("geom1").run("r4");
     model.geom("geom1").run("r4");
     model.geom("geom1").feature().create("r5", "Rectangle");
     model.geom("geom1").feature("r5").set("type", "solid");
     model.geom("geom1").feature("r5").set("base", "corner");
     model.geom("geom1").feature("r5").set("pos", new String[]{"1.5", rect5Y});
-    model.geom("geom1").feature("r5").set("size", new String[]{rect5W, "0.12"});
+    model.geom("geom1").feature("r5").set("size", new String[]{baffle_W, baffle_H});
     model.geom("geom1").run("r5");
     model.geom("geom1").run("r5");
     model.geom("geom1").feature().create("r6", "Rectangle");
     model.geom("geom1").feature("r6").set("type", "solid");
     model.geom("geom1").feature("r6").set("base", "corner");
     model.geom("geom1").feature("r6").set("pos", new String[]{"1.5", rect6Y});
-    model.geom("geom1").feature("r6").set("size", new String[]{rect6W, "0.12"});
+    model.geom("geom1").feature("r6").set("size", new String[]{baffle_W, baffle_H});
     model.geom("geom1").run("r6");
     model.geom("geom1").run("r6");
 	
 	float aux = Float.parseFloat(rect1W);
-	float rect7X_p = aux - Float.parseFloat(rect7W) + 1.5f;
-	float rect8X_p = aux - Float.parseFloat(rect8W) + 1.5f;
-	float rect9X_p = aux - Float.parseFloat(rect9W) + 1.5f;
-	
+	float rect7X_p = aux - Float.parseFloat(baffle_W) + 1.5f;
 	String rect7X = Float.toString(rect7X_p);
-	String rect8X = Float.toString(rect8X_p);
-	String rect9X = Float.toString(rect9X_p);
 	
+	float rect7Y_f = 0.3f * Float.parseFloat(rect1H);
+	float rect8Y_f = 0.55f * Float.parseFloat(rect1H);
+	float rect9Y_f = 0.8f * Float.parseFloat(rect1H);
+	
+	String rect7Y = Float.toString (rect7Y_f);
+	String rect8Y = Float.toString (rect8Y_f);
+	String rect9Y = Float.toString (rect9Y_f);
+
 	
     model.geom("geom1").feature().create("r7", "Rectangle");
     model.geom("geom1").feature("r7").set("type", "solid");
     model.geom("geom1").feature("r7").set("base", "corner");
     model.geom("geom1").feature("r7").set("pos", new String[]{rect7X, rect7Y});
-    model.geom("geom1").feature("r7").set("size", new String[]{rect7W, "0.12"});
+    model.geom("geom1").feature("r7").set("size", new String[]{baffle_W, baffle_H});
     model.geom("geom1").run("r7");
     model.geom("geom1").run("r7");
     model.geom("geom1").feature().create("r8", "Rectangle");
     model.geom("geom1").feature("r8").set("type", "solid");
     model.geom("geom1").feature("r8").set("base", "corner");
-    model.geom("geom1").feature("r8").set("pos", new String[]{rect8X, rect8Y});
-    model.geom("geom1").feature("r8").set("size", new String[]{rect8W, "0.12"});
+    model.geom("geom1").feature("r8").set("pos", new String[]{rect7X, rect8Y});
+    model.geom("geom1").feature("r8").set("size", new String[]{baffle_W, baffle_H});
     model.geom("geom1").run("r8");
     model.geom("geom1").run("r8");
     model.geom("geom1").feature().create("r9", "Rectangle");
     model.geom("geom1").feature("r9").set("type", "solid");
     model.geom("geom1").feature("r9").set("base", "corner");
-    model.geom("geom1").feature("r9").set("pos", new String[]{rect9X, rect9Y});
-    model.geom("geom1").feature("r9").set("size", new String[]{rect9W, "0.12"});
+    model.geom("geom1").feature("r9").set("pos", new String[]{rect7X, rect9Y});
+    model.geom("geom1").feature("r9").set("size", new String[]{baffle_W, baffle_H});
     model.geom("geom1").run("r9");
 
     model.selection().create("uni1", "Union");
@@ -734,8 +746,8 @@ public class baffles_velocity {
     model.geom("geom1").run("r7");
     model.geom("geom1").feature("r7").set("rot", "0");
     model.geom("geom1").run("r7");
-    model.geom("geom1").runPre("fin");
-    model.geom("geom1").run();*/
+    model.geom("geom1").runPre("fin");*/
+    model.geom("geom1").run();
 
     model.mesh("mesh1").run();
     model.mesh("mesh1").autoMeshSize(1);
@@ -856,17 +868,21 @@ public class baffles_velocity {
 
     model.result("pg1").run();
     model.result().export().create("data1", "Data");
-    model.result().export("data1").set("expr", new String[]{"u"});
-    model.result().export("data1").set("descr", new String[]{"Velocity field, x component"});
+    model.result().export("data1").set("expr", new String[]{"u", "v"});
+    model.result().export("data1").set("descr", new String[]{"Velocity field, x component", "Velocity field, y component"});
     model.result().export("data1")
          .set("filename", wdir + "\\Velocity.txt");
     model.result().export("data1").run();
+
+    model.label("pilotreactor_vel_algae_axial flow baffles_2D alt_velocity.mph");
+
+    model.result("pg1").run();
 
     return model;
   }
 
   public static void main(String[] args) {
-    Model model = run(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12], args[13], args[14], args[15], args[16]);
+    Model model = run(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
     run2(model, args[0]);
   }
 

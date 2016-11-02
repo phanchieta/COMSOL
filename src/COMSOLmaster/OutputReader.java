@@ -22,7 +22,8 @@ public class OutputReader {
     
     private List<Double> x_val = new ArrayList<>();
     private List<Double> y_val = new ArrayList<>();
-    private List<Double> speed = new ArrayList<>();
+    private List<Double> velocity_x = new ArrayList<>();
+    private List<Double> velocity_y = new ArrayList<>();
     private List<Double> pressure = new ArrayList<>();
     
     
@@ -44,7 +45,8 @@ public OutputReader (String path) throws IOException
       Scanner sc = new Scanner(strLine);
       x_val.add(sc.nextDouble());
       y_val.add(sc.nextDouble());
-      speed.add(abs(sc.nextDouble()));
+      velocity_x.add(abs(sc.nextDouble()));
+      velocity_y.add(abs(sc.nextDouble()));
       //pressure.add(sc.nextDouble());
       
       
@@ -63,18 +65,21 @@ public OutputReader (String path) throws IOException
        
 }
 
-public List<Double> getSpeed()
+public List<Double> getVelocityX()
 {
-    return speed;
+    return velocity_x;
 }
-
+public List<Double> getVelocityY()
+{
+    return velocity_y;
+}
 public double avgSpeed()
 {
     double count=0.0f, avg;
     
-    for (int i = 0; i< speed.size(); i++)
-        count+=speed.get(i);
-    avg = count/speed.size();
+    for (int i = 0; i< velocity_x.size(); i++)
+        count = count + velocity_x.get(i) + velocity_y.get(i);
+    avg = count/(velocity_x.size() + velocity_y.size());
     //System.out.println(avg);
     return avg;
 }
@@ -86,7 +91,7 @@ public List<Double> getPressure ()
 
 public void printResults ()
 {
-    System.out.println(speed);
+    System.out.println(velocity_x);
     System.out.println(pressure);
 }
     

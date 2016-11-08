@@ -24,7 +24,7 @@ import org.jenetics.Mutator;
 import org.jenetics.Optimize;
 import org.jenetics.Phenotype;
 import org.jenetics.engine.Engine;
-import org.jenetics.engine.EvolutionResult;
+import org.jenetics.engine.EvolutionResult; 
 import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
 import org.jenetics.engine.EvolutionStatistics;
 import org.jenetics.engine.codecs;
@@ -47,13 +47,13 @@ public class Optimizer {
         private static final double RECT1_SIZE_Y_MAX = 10;
         private static final double RECT3_Y_MIN = 0.9; /*Limiting outlet to a height of 90-100%*/
         private static final double RECT3_Y_MAX = 1;
-        private static final double BAFFLE_H_MIN = 0.01;
-        private static final double BAFFLE_H_MAX = 0.04;
+
                 
  
         
         private final double mutationProb; //0.03
         private final double xOver; //0.6
+        private final double offspringFraction;
         private final int nThreads;
         private final int maxGens;
         private final int popSize;
@@ -65,6 +65,7 @@ public class Optimizer {
         nThreads = 1;
         maxGens = 100;
         popSize = 30;
+        offspringFraction = 0.5;
         
     }
 
@@ -87,16 +88,17 @@ public class Optimizer {
             }
                        
             
-            double rect1X, rect2Ypos, rect3Ypos;
+            double rect1X, rect2Ypos, rect3Ypos, baffle_H;
             
             rect2Ypos = rect3Ypos = x[0] - 0.12;
             rect2Ypos = rect2Ypos * x[1];
             rect3Ypos = rect3Ypos * x[2];
             rect1X = 5/x[0];
+            baffle_H = 0.079/(x[3]*rect1X);
                     
                         
             builder.command("cmd.exe", "/c", "comsolbatch -inputfile " + classfile + " \"%cd%\" " + rect1X + " " + x[0] + " " + rect2Ypos + " " + rect3Ypos
-                    + " " + x[3]*rect1X + " " + x[4]*x[0]); 
+                    + " " + x[3]*rect1X + " " + baffle_H); 
                     
             p = builder.start();
             r = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -127,8 +129,8 @@ public class Optimizer {
             }                
               
  
-            OutputReader or = new OutputReader("Velocity.txt");
-            try(FileWriter fw = new FileWriter("conv.txt", true);
+            OutputReader or = new OutputReader("Mass.txt");
+            try(FileWriter fw = new FileWriter("All Fitnesses.txt", true);
                     
             BufferedWriter bw = new BufferedWriter(fw);
                     
@@ -136,7 +138,7 @@ public class Optimizer {
             {
                 /*Printing each fitness function to file conv.txt*/
                     out.println(rect1X + " " + x[0] + " " + rect2Ypos + " " + rect3Ypos
-            + " " + x[3]*rect1X+ " " + x[4]*x[0]+ " ->" + or.avgSpeed());
+            + " " + x[3]*rect1X+ " " + baffle_H + " ->" + or.avgMass());
                 
             
             } 
@@ -146,21 +148,21 @@ public class Optimizer {
             }
             
                               
-            return or.avgSpeed();
+            return or.avgMass();
         } 
     catch (IOException ex) 
         {
             Logger.getLogger(Optimizer.class.getName()).log(Level.SEVERE, null, ex);
         }
-    return 1000;
+    return 0;
 }
     
     public void genetic(ExternalPrograms ep) throws IOException
     {
         ep.init();
         Optimizer.classfile = ep.getClassfile();
-        
-        
+
+       
         final ExecutorService executor = Executors.newFixedThreadPool(nThreads);
         final Engine<DoubleGene, Double> engine = Engine
 			.builder(
@@ -168,12 +170,11 @@ public class Optimizer {
 				codecs.ofVector(DoubleRange.of(RECT1_SIZE_Y_MIN,RECT1_SIZE_Y_MAX),
                                         DoubleRange.of(RECT2_Y_MIN,RECT2_Y_MAX),
                                         DoubleRange.of(RECT3_Y_MIN,RECT3_Y_MAX),
-                                        DoubleRange.of(BAFFLE_W_MIN,BAFFLE_W_MAX),
-                                        DoubleRange.of(BAFFLE_H_MIN, BAFFLE_H_MAX)
+                                        DoubleRange.of(BAFFLE_W_MIN,BAFFLE_W_MAX)                                        
                                         )
                         )
                         .populationSize(popSize)
-                        .offspringFraction(0.5)
+                        .offspringFraction(offspringFraction)
                         .optimize(Optimize.MAXIMUM)
 			.alterers(
 				new Mutator<>(mutationProb),
@@ -183,29 +184,43 @@ public class Optimizer {
 
 		final EvolutionStatistics<Double, ?>
 			statistics = EvolutionStatistics.ofNumber();
+                
 
 		/*final Phenotype<DoubleGene, Double> best = engine.stream()
 			.limit(bySteadyFitness(3))
 			.peek(statistics)
 			.collect(toBestPhenotype());*/
                 
+            try(FileWriter fw = new FileWriter("Best.txt", true);       
+            BufferedWriter bw = new BufferedWriter(fw);      
+            PrintWriter out = new PrintWriter(bw))
+            {
                 final EvolutionResult<DoubleGene, Double> best = engine.stream() 
                         .limit(bySteadyFitness (7))
                         .limit(maxGens)
                         .peek(statistics)
+                        .peek((EvolutionResult<DoubleGene, Double> best1) -> {
+                            out.println(best1.getBestPhenotype()); /*Printing best from each generation*/
+                })
                         .collect(EvolutionResult.toBestEvolutionResult()); /*Forcing elitism*/
                 
+                System.out.println(statistics);
+                System.out.println("Best= " + best.getBestPhenotype());
+                out.println(statistics);
+                out.println(best.getBestPhenotype());
+                
+            }
                 /*final EvolutionResult<DoubleGene, Double> best = engine.stream() 
                         .limit(maxGens)
                         .peek(statistics)
                         .collect(EvolutionResult.toBestEvolutionResult());*/
 
-		System.out.println(statistics);
-                System.out.println("Best= " + best.getBestPhenotype());
+
                 
                 /*System.out.println(engine.getSurvivorsSelector());*/
         
                 
+
     }
 
  

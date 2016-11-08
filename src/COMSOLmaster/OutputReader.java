@@ -22,8 +22,8 @@ public class OutputReader {
     
     private List<Double> x_val = new ArrayList<>();
     private List<Double> y_val = new ArrayList<>();
-    private List<Double> velocity_x = new ArrayList<>();
-    private List<Double> velocity_y = new ArrayList<>();
+    private List<Double> mass_Xcd = new ArrayList<>();
+    private List<Double> mass_Xst = new ArrayList<>();
     private List<Double> pressure = new ArrayList<>();
     
     
@@ -45,8 +45,8 @@ public OutputReader (String path) throws IOException
       Scanner sc = new Scanner(strLine);
       x_val.add(sc.nextDouble());
       y_val.add(sc.nextDouble());
-      velocity_x.add(abs(sc.nextDouble()));
-      velocity_y.add(abs(sc.nextDouble()));
+      mass_Xcd.add(abs(sc.nextDouble()));
+      mass_Xst.add(sc.nextDouble());
       //pressure.add(sc.nextDouble());
       
       
@@ -65,24 +65,42 @@ public OutputReader (String path) throws IOException
        
 }
 
-public List<Double> getVelocityX()
+public List<Double> getMass_Xcd()
 {
-    return velocity_x;
+    return mass_Xcd;
 }
-public List<Double> getVelocityY()
+public List<Double> getMass_Xst()
 {
-    return velocity_y;
+    return mass_Xst;
 }
-public double avgSpeed()
+public double avgMass()
+{
+    double count=0.0f, count2=0.0f, avg1, avg2;
+    
+    for (int i = 0; i< mass_Xcd.size(); i++)
+    {
+        count += mass_Xcd.get(i);
+        count2 += mass_Xst.get(i);      
+    }
+         
+    avg1 = count/(mass_Xcd.size());
+    avg2 = count2/(mass_Xst.size());
+    
+    //System.out.println(avg);
+    return (avg1+avg2)/2;
+}
+
+public double avgMassXcd()
 {
     double count=0.0f, avg;
     
-    for (int i = 0; i< velocity_x.size(); i++)
-        count = count + velocity_x.get(i) + velocity_y.get(i);
-    avg = count/(velocity_x.size() + velocity_y.size());
+    for (int i = 0; i< mass_Xcd.size(); i++)
+        count = count + mass_Xcd.get(i);
+    avg = count/mass_Xcd.size();
     //System.out.println(avg);
     return avg;
 }
+        
 
 public List<Double> getPressure ()
 {
@@ -91,7 +109,7 @@ public List<Double> getPressure ()
 
 public void printResults ()
 {
-    System.out.println(velocity_x);
+    System.out.println(mass_Xcd);
     System.out.println(pressure);
 }
     

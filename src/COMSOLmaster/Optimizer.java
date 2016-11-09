@@ -39,7 +39,7 @@ import org.jenetics.util.DoubleRange;
 public class Optimizer {
         
         private static String classfile;
-        private static final double BAFFLE_W_MIN = 0;
+        private static final double BAFFLE_W_MIN = 0.2;
         private static final double BAFFLE_W_MAX = 0.66; 
         private static final double RECT2_Y_MIN = 0;
         private static final double RECT2_Y_MAX = 0.1; /*Limiting inlet to a height 0-10%*/

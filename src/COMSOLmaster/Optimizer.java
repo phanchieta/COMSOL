@@ -39,7 +39,7 @@ import org.jenetics.util.DoubleRange;
 public class Optimizer {
         
         private static String classfile;
-        private static final double BAFFLE_W_MIN = 0.2;
+        private static final double BAFFLE_W_MIN = 0.2; 
         private static final double BAFFLE_W_MAX = 0.66; 
         private static final double RECT2_Y_MIN = 0;
         private static final double RECT2_Y_MAX = 0.1; /*Limiting inlet to a height 0-10%*/
@@ -128,7 +128,6 @@ public class Optimizer {
                  
             }                
               
- 
             OutputReader or = new OutputReader("Mass.txt");
             try(FileWriter fw = new FileWriter("All Fitnesses.txt", true);
                     
@@ -138,7 +137,7 @@ public class Optimizer {
             {
                 /*Printing each fitness function to file conv.txt*/
                     out.println(rect1X + " " + x[0] + " " + rect2Ypos + " " + rect3Ypos
-            + " " + x[3]*rect1X+ " " + baffle_H + " ->" + or.avgMass());
+            + " " + x[3]*rect1X+ " " + baffle_H + " ->" + or.outletMass());
                 
             
             } 
@@ -148,7 +147,7 @@ public class Optimizer {
             }
             
                               
-            return or.avgMass();
+            return or.outletMass();
         } 
     catch (IOException ex) 
         {

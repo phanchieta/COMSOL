@@ -11,6 +11,7 @@ import java.io.IOException;
 import static java.lang.Math.abs;
 import static java.lang.System.in;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -48,8 +49,6 @@ public OutputReader (String path) throws IOException
       mass_Xcd.add(abs(sc.nextDouble()));
       mass_Xst.add(sc.nextDouble());
       //pressure.add(sc.nextDouble());
-      
-      
 	  //Adding values to list
     }
     //Close the input stream
@@ -99,6 +98,26 @@ public double avgMassXcd()
     avg = count/mass_Xcd.size();
     //System.out.println(avg);
     return avg;
+}
+
+public double outletMass() 
+{
+   int a, i; 
+   double mass_xcd = 0;
+   double mass_xst = 0;
+   
+   for (i=0;i<5;i++)
+   {
+        a = x_val.indexOf(Collections.max(x_val));
+        mass_xcd += mass_Xcd.get(a);
+        mass_xst += mass_Xst.get(a);
+        x_val.remove(a);
+        y_val.remove(a);
+        mass_Xcd.remove(a);
+        mass_Xst.remove(a);
+   }
+   
+   return ((mass_xcd/5)+(mass_xst/5)); 
 }
         
 

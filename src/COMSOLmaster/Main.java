@@ -33,20 +33,17 @@ public class Main {
         //run optimization routine and set new params
         
         System.out.println("Writing new parameters.");
-        
-        nv.setRadius(0.1f);
-        nv.setX_dis(1);
-        nv.setY_dis(0.1f);
-        nv.writeVars();
-
-        
+                
         ep.loop(nv); //loop with new params
         */
+        
+        
         ExternalPrograms ep = new ExternalPrograms(args[0], "log");
         Optimizer op = new Optimizer();
         op.genetic(ep);
         
-        exit(1);
+
+        exit(0);
       
     }
     

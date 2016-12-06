@@ -39,7 +39,7 @@ public class Main {
         
         
         ExternalPrograms ep = new ExternalPrograms(args[0], "log");
-        Optimizer op = new Optimizer();
+        Optimizer op = new Optimizer(Integer.parseInt(args[1]),Integer.parseInt(args[2]));
         op.genetic(ep);
         
 

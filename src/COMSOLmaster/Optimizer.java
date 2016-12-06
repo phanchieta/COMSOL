@@ -39,7 +39,9 @@ import org.jenetics.util.DoubleRange;
 public class Optimizer {
         
         private static String classfile;
-        private static final double BAFFLE_W_MIN = 0.2; 
+        
+        /*Each pair of parameters below corresponds to the ranges for each variable*/
+        private static final double BAFFLE_W_MIN = 0.2; /*Limiting baffle width 20-66% of total reactor width*/
         private static final double BAFFLE_W_MAX = 0.66; 
         private static final double RECT2_Y_MIN = 0;
         private static final double RECT2_Y_MAX = 0.1; /*Limiting inlet to a height 0-10%*/
@@ -51,25 +53,25 @@ public class Optimizer {
                 
  
         
-        private final double mutationProb; //0.03
-        private final double xOver; //0.6
+        private final double mutationProb; 
+        private final double xOver; 
         private final double offspringFraction;
         private final int nThreads;
         private final int maxGens;
         private final int popSize;
                 
-    public Optimizer ()
+    public Optimizer (int popSize, int maxGens)
     {
-        mutationProb = 0.1;
-        xOver = 0.05;
+        mutationProb = 0.01;
+        xOver = 0.8;
         nThreads = 1;
-        maxGens = 100;
-        popSize = 30;
+        this.maxGens = maxGens;
+        this.popSize = popSize;
         offspringFraction = 0.5;
         
     }
 
-    private static double fitness(final double[] x) { /*NOT thread safe. Yet...*/
+    private static double fitness(final double[] x) { /*NOT thread safe.*/
 	
     try {
             ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "cd " + System.getProperty("user.dir"));
@@ -122,7 +124,7 @@ public class Optimizer {
             
             LogHandler lh = new LogHandler ("log.txt");
             
-            if (lh.error()) //Handle error that was detected
+            if (lh.error()) /*Detects error in log file*/
             {
                 System.out.println ("Error detected in COMSOL log file");
                  
@@ -184,18 +186,12 @@ public class Optimizer {
 		final EvolutionStatistics<Double, ?>
 			statistics = EvolutionStatistics.ofNumber();
                 
-
-		/*final Phenotype<DoubleGene, Double> best = engine.stream()
-			.limit(bySteadyFitness(3))
-			.peek(statistics)
-			.collect(toBestPhenotype());*/
-                
-            try(FileWriter fw = new FileWriter("Best.txt", true);       
+            try(FileWriter fw = new FileWriter("Best.txt", true);  /*Best from each generation*/     
             BufferedWriter bw = new BufferedWriter(fw);      
             PrintWriter out = new PrintWriter(bw))
             {
                 final EvolutionResult<DoubleGene, Double> best = engine.stream() 
-                        .limit(bySteadyFitness (7))
+                        .limit(bySteadyFitness(3))
                         .limit(maxGens)
                         .peek(statistics)
                         .peek((EvolutionResult<DoubleGene, Double> best1) -> {
@@ -209,14 +205,7 @@ public class Optimizer {
                 out.println(best.getBestPhenotype());
                 
             }
-                /*final EvolutionResult<DoubleGene, Double> best = engine.stream() 
-                        .limit(maxGens)
-                        .peek(statistics)
-                        .collect(EvolutionResult.toBestEvolutionResult());*/
-
-
                 
-                /*System.out.println(engine.getSurvivorsSelector());*/
         
                 
 
